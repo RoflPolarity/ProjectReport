@@ -1,0 +1,44 @@
+.report-card {
+    margin-bottom: 16px;
+    margin-left: 15px;
+    /* Добавьте остальные стили по необходимости */
+  }
+  
+  .report-content {
+    margin-top: 15px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #fff;
+    page-break-inside: avoid;
+
+  }
+  
+  .report-meta {
+    /* Стили для мета-информации (дата, ТМ) */
+  }
+  
+  .report-date,
+  .report-tm,
+  .report-text,
+  .report-mood,
+  .report-satisfaction,
+  .report-activity,
+  .artifact-name {
+    font-size: 14px; /* Пример размера шрифта */
+    /* Добавьте остальные стили по необходимости */
+  }
+  
+  /* Добавьте стили для иконок, используя классы, возвращаемые getIconForFileType() */
+  .pdf-icon {
+    /* Стили для иконки PDF */
+  }
+  
+  .image-icon {
+    /* Стили для иконки изображения */
+  }
+  
+  .default-icon {
+    /* Стили для иконки по умолчанию */
+  }
+  

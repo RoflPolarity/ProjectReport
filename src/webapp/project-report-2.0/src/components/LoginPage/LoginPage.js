@@ -1,38 +1,53 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-const LoginPage = () => {
+
+const LoginPage = ({onLoginSuccess}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const navigate = useNavigate();
+  const navigateToControlPanel=()=>{navigate("/ControlPanel")}
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
-    // Создаем объект с данными пользователя для отправки на сервер
     const userData = {
-      username: username,
+      login: username,
       password: password,
     };
 
     try {
-      // Отправляем POST-запрос на сервер
-      const response = await fetch('ваш_сервер/api/login', {
+          const response = await fetch('http://77.50.236.202:48225/api/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData),
-      });
+    });
+    
+      const responseBody = await response.json();
+      
+      if (responseBody.status === true) {
+        localStorage.setItem('token', responseBody.user.token);
+        onLoginSuccess(responseBody.user);
+        switch (responseBody.user.role.name){
+          case 'ADMIN':
+            navigateToControlPanel();
+            break;
+          case 'PM':
+            navigateToControlPanel();
+            break;
+              case 'TM':
+              navigateToControlPanel();
+              break;
+          default:
+            navigate('/')
+        }
 
-      if (response.ok) {
-        // Вход успешный, выполняем действия после успешной авторизации
-        console.log('Успешный вход!');
       } else {
-        // Вход неуспешный, обрабатываем ошибку
         console.error('Ошибка при входе');
       }
     } catch (error) {

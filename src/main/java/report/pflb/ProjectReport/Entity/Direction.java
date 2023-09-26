@@ -1,19 +1,16 @@
 package report.pflb.ProjectReport.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "direction")
 public class Direction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     public Direction(){}
-    public Direction(Long id, String name){
-        this.id = id;
+    public Direction(String name){
         this.name = name;
     }
     public void setId(Long id) {
@@ -26,6 +23,11 @@ public class Direction {
         return id;
     }
     public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
         return name;
     }
 }
