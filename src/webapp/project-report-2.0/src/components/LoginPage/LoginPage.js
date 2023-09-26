@@ -22,6 +22,7 @@ const LoginPage = ({onLoginSuccess}) => {
     try {
           const response = await fetch('http://77.50.236.202:48225/api/login', {
         method: 'POST',
+        mode:'cors',
         headers: {
             'Content-Type': 'application/json',
         },

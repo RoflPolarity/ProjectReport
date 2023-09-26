@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,8 +33,8 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class WebSecurityConf {
     private LdapContextSource contextSource;
     private final AuthenticationProvider authenticationProvider;
@@ -52,18 +53,18 @@ public class WebSecurityConf {
                                 configuration.setAllowedOrigins(List.of("*"));
                                 configuration.setAllowedHeaders(List.of("*"));
                                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                                source.registerCorsConfiguration("/**", configuration);
+                                source.registerCorsConfiguration("/*", configuration);
                                 return configuration;
                             }
                         });
                     }
-                }).
-                authorizeHttpRequests(new Customizer<AuthorizeHttpRequestsConfigurer<org.springframework.security.config.annotation.web.builders.HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>() {
+                }).formLogin(new Customizer<FormLoginConfigurer<HttpSecurity>>() {
                     @Override
-                    public void customize(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationManagerRequestMatcherRegistry) {
-                      authorizationManagerRequestMatcherRegistry.requestMatchers("/api/login").permitAll();
+                    public void customize(FormLoginConfigurer<HttpSecurity> httpSecurityFormLoginConfigurer) {
+                        httpSecurityFormLoginConfigurer.loginPage("/api/login");
                     }
-                }).sessionManagement(new Customizer<SessionManagementConfigurer<HttpSecurity>>() {
+                })
+                .sessionManagement(new Customizer<SessionManagementConfigurer<HttpSecurity>>() {
                     @Override
                     public void customize(SessionManagementConfigurer<HttpSecurity> httpSecuritySessionManagementConfigurer) {
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -14,7 +14,6 @@ import report.pflb.ProjectReport.service.LdapService;
 import report.pflb.ProjectReport.service.userService;
 
 @RestController
-@CrossOrigin
 public class auth {
     @Autowired
     private userService userService;
@@ -26,6 +25,7 @@ public class auth {
         this.ldapService = ldapService;
         this.emailService = emailService;
     }
+    @CrossOrigin
     @PostMapping("/api/login")
     public ResponseEntity<AuthResponse> auth(@RequestBody AuthRequest request) {
         System.out.println("SRABOTAL auth");
