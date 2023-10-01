@@ -27,12 +27,11 @@ public class JwtAuth extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain
     )throws ServletException, IOException {
-        System.out.println("Srabotal JWT");
+        System.out.println(request);
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userLogin;
         if (authHeader == null || !authHeader.startsWith("Bearer")){
-                
                 filterChain.doFilter(request,response);
                 return;
             }

@@ -15,10 +15,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
-import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
-import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
-import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
+import org.springframework.security.config.annotation.web.configurers.*;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -58,13 +55,13 @@ public class WebSecurityConf {
                             }
                         });
                     }
-                }).formLogin(new Customizer<FormLoginConfigurer<HttpSecurity>>() {
+                }).csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(new Customizer<AuthorizeHttpRequestsConfigurer<org.springframework.security.config.annotation.web.builders.HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>() {
                     @Override
-                    public void customize(FormLoginConfigurer<HttpSecurity> httpSecurityFormLoginConfigurer) {
-                        httpSecurityFormLoginConfigurer.loginPage("/api/login");
+                    public void customize(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationManagerRequestMatcherRegistry) {
+                        authorizationManagerRequestMatcherRegistry.requestMatchers("/api/login").permitAll();
+                        authorizationManagerRequestMatcherRegistry.anyRequest().authenticated();
                     }
-                })
-                .sessionManagement(new Customizer<SessionManagementConfigurer<HttpSecurity>>() {
+                }).sessionManagement(new Customizer<SessionManagementConfigurer<HttpSecurity>>() {
                     @Override
                     public void customize(SessionManagementConfigurer<HttpSecurity> httpSecuritySessionManagementConfigurer) {
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

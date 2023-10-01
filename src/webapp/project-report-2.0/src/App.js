@@ -8,6 +8,7 @@ import AddProject from './components/addProject/AddProject';
 import ProjectPage from './components/ProjectPage/ProjectPage';
 import AddReportPage from './components/AddReport';
 import ReportPage from './components/ReportPage/ReportPage';
+import EditProjectPage from './components/ProjectPage/EditProjectPage';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -42,6 +43,7 @@ export default function App() {
         <Route path="/project/:projectNumber" element={<ProjectPage />} />
         <Route path='/project/add-report' element={<AddReportPage />}/>
         <Route path='/report/:projectNumber' element={<ReportPage/>}/>
+        <Route path='/edit/:projectNumber' element={<EditProjectPage/>}/>
       </Routes>
     </div>
     

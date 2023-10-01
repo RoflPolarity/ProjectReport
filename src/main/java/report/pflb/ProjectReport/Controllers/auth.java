@@ -28,10 +28,9 @@ public class auth {
     @CrossOrigin
     @PostMapping("/api/login")
     public ResponseEntity<AuthResponse> auth(@RequestBody AuthRequest request) {
-        System.out.println("SRABOTAL auth");
         if (ldapService.auth(request.getLogin(),request.getPassword())){
             UserLdap userLdap = ldapService.findUserFromLdap(request.getLogin());
-            if (userLdap != null) {
+            if (userLdap != null && userService.existsByLogin(request.getLogin())) {
                 User user = userService.findByLogin(request.getLogin());
                 String token = jwtService.generateToken(user);
                 user.setToken(token);

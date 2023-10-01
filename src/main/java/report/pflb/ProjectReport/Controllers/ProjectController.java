@@ -47,17 +47,29 @@ public class ProjectController {
     public boolean addProject(@RequestBody String projectJSON){
         try {
             ProjectRequest request = objectMapper.readValue(projectJSON, ProjectRequest.class);
-            projectService.save(new Project(
-                    LocalDate.parse(request.getStartDate()),
-                    LocalDate.parse(request.getEndDate()),
-                    request.getProjectName(),
-                    request.getStatus(),
-                    userService.saveUser(User.migrateFromLdap(ldapService.findUserLdap_Mail(request.getPm()),roleService.find("PM"))),
-                    userService.saveUser(User.migrateFromLdap(ldapService.findUserLdap_Mail(request.getTm()),roleService.find("TM"))),
-                    request.getProjectNumber(),
-                    directionService.find(request.direction)
-                    ));
-
+            if (request.getEndDate()==null){
+                projectService.save(new Project(
+                        LocalDate.parse(request.getStartDate()),
+                        null,
+                        request.getProjectName(),
+                        request.getStatus(),
+                        userService.saveUser(User.migrateFromLdap(ldapService.findUserLdap_Mail(request.getPm()),roleService.find("PM"))),
+                        userService.saveUser(User.migrateFromLdap(ldapService.findUserLdap_Mail(request.getTm()),roleService.find("TM"))),
+                        request.getProjectNumber(),
+                        directionService.find(request.direction)
+                ));
+            }else {
+                projectService.save(new Project(
+                        LocalDate.parse(request.getStartDate()),
+                        LocalDate.parse(request.getEndDate()),
+                        request.getProjectName(),
+                        request.getStatus(),
+                        userService.saveUser(User.migrateFromLdap(ldapService.findUserLdap_Mail(request.getPm()), roleService.find("PM"))),
+                        userService.saveUser(User.migrateFromLdap(ldapService.findUserLdap_Mail(request.getTm()), roleService.find("TM"))),
+                        request.getProjectNumber(),
+                        directionService.find(request.direction)
+                ));
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

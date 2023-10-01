@@ -65,30 +65,34 @@ public class ReportController {
                     customerSatisfaction
             ));
 
-            // Обработка файлов
-            for (MultipartFile file : files) {
-                LocalDate currentDate = LocalDate.now();
-                File projectFolder = new File("C:\\Users\\Immor\\Desktop\\Report\\" + projectService.findByProjectNumber(project_id).getName());
-                if (!projectFolder.exists()) {
-                    projectFolder.mkdir();
-                }
-                String currentDateFolderName = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                String currentDateFolderPath = projectFolder.getPath() + "/" + currentDateFolderName;
-                File currentDateFolder = new File(currentDateFolderPath);
-                if (!currentDateFolder.exists()) {currentDateFolder.mkdir();}
-                String filePath = currentDateFolderPath + "/" + file.getOriginalFilename();
-                File destFile = new File(filePath);
-                if (!destFile.exists()){destFile.createNewFile();}
-                try {
-                    file.transferTo(destFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if(destFile.exists()){
-                    artifactsService.save(new Artifact(destFile.getPath(), report));
+            if (files != null) {
+                for (MultipartFile file : files) {
+                    LocalDate currentDate = LocalDate.now();
+                    File projectFolder = new File("/home/a.yanpolsky/"+projectService.findByProjectNumber(project_id).getName());
+                    if (!projectFolder.exists()) {
+                        projectFolder.mkdir();
+                    }
+                    String currentDateFolderName = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    String currentDateFolderPath = projectFolder.getPath() + "/" + currentDateFolderName;
+                    File currentDateFolder = new File(currentDateFolderPath);
+                    if (!currentDateFolder.exists()) {
+                        currentDateFolder.mkdir();
+                    }
+                    String filePath = currentDateFolderPath + "/" + file.getOriginalFilename();
+                    File destFile = new File(filePath);
+                    if (!destFile.exists()) {
+                        destFile.createNewFile();
+                    }
+                    try {
+                        file.transferTo(destFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (destFile.exists()) {
+                        artifactsService.save(new Artifact(destFile.getPath(), report));
+                    }
                 }
             }
-
             if (report != null) return true;
         } catch (Exception e){
             e.printStackTrace();
