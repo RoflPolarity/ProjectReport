@@ -42,6 +42,16 @@ public class ProjectController {
         };
     }
 
+    @PostMapping("api/EditProject")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public boolean editProject(@RequestBody String projectJSON){
+        try {
+            ProjectRequest request = objectMapper.readValue(projectJSON, ProjectRequest.class);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     @PostMapping("/api/AddProject")
     @PreAuthorize("hasAnyAuthority('ADMIN','PM')")
     public boolean addProject(@RequestBody String projectJSON){
