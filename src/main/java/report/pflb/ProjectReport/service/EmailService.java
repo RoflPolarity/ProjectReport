@@ -21,6 +21,9 @@ public class EmailService {
     private projectService projectService;
     @Autowired
     private reportService reportService;
+    @Autowired
+    private userService userService;
+
     public void sendEmail(String to, String subject, String text){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
@@ -39,7 +42,9 @@ public class EmailService {
                     stream().sorted(Comparator.comparing(Report::getDateCreate).reversed())
                     .toList();
             if (ChronoUnit.DAYS.between(LocalDate.now(),reports.get(0).getDateCreate()) >= 7){
-                System.out.println(project.getTm().getLogin()+"@pflb.ru");
+                for (int i = 0; i < project.getTm().size(); i++) {
+                    System.out.println(userService.findById(project.getTm().get(i)).getLogin()+"@pflb.ru");
+                }
                 //sendEmail(project.getTm().getLogin()+"@pflb.ru", "Заполнение отчета", "Добрый день!\nВам необходимо заполнить отчет");
             }
         }

@@ -3,6 +3,8 @@ package report.pflb.ProjectReport.Entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -14,34 +16,35 @@ public class Project {
     private LocalDate dateStart;
     private String name;
     private LocalDate dateEnd;
-
-    @ManyToOne
-    @JoinColumn(name = "tm_id")
-    private User tm;
-
+    @Column(name = "tm_ids")
+    private List<Long> tmIds;
+    @Column(name = "pm_ids")
+    private List<Long> pmIds;
     private String status;
-
+    @Transient
+    private List<User> pms = new ArrayList<>();
+    @Transient
+    private List<User> tms = new ArrayList<>();
     @Column(name = "project_number")
     private String projectNumber;
 
     @ManyToOne
     @JoinColumn(name = "direction_id")
     private Direction direction;
-    @ManyToOne
-    @JoinColumn(name = "pm_id")
-    private User pm;
+
 
     public Project(){}
 
-    public Project(LocalDate dateStart, LocalDate dateEnd, String name, String status, User pm, User tm, String projectNumber, Direction direction) {
+    public Project(LocalDate dateStart, LocalDate dateEnd, String name, String status, List<Long> pm, List<Long> tm, String projectNumber, Direction direction) {
         this.name = name;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
-        this.pm = pm;
-        this.tm = tm;
+        this.pmIds = pm;
+        this.tmIds = tm;
         this.status = status;
         this.projectNumber = projectNumber;
         this.direction = direction;
+
     }
 
     public Long getId() {
@@ -76,20 +79,20 @@ public class Project {
         this.name = name;
     }
 
-    public User getTm() {
-        return tm;
+    public List<Long> getTm() {
+        return tmIds;
     }
 
-    public void setTm(User tm) {
-        this.tm = tm;
+    public void setTm(List<Long> tm) {
+        this.tmIds = tm;
     }
 
-    public User getPm() {
-        return pm;
+    public List<Long> getPm() {
+        return pmIds;
     }
 
-    public void setPm(User pm) {
-        this.pm = pm;
+    public void setPm(List<Long> pm) {
+        this.pmIds = pm;
     }
 
     public String getStatus() {
@@ -117,4 +120,19 @@ public class Project {
     }
 
 
+    public List<User> getPms() {
+        return pms;
+    }
+
+    public void setPms(List<User> pms) {
+        this.pms = pms;
+    }
+
+    public List<User> getTms() {
+        return tms;
+    }
+
+    public void setTms(List<User> tms) {
+        this.tms = tms;
+    }
 }

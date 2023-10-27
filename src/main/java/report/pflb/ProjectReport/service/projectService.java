@@ -22,7 +22,21 @@ public class projectService {
     public List<Project> findAll(){return projectRepository.findAll();}
 
     public Project findById(int id){return projectRepository.findById(id);}
-    public List<Project> findByPM(long id){return projectRepository.findByTm_id(id);}
-    public List<Project> findByTM(long id){return projectRepository.findByPm_id(id);}
     public Project findByProjectNumber(String projectNumber){return projectRepository.findByProjectNumber(projectNumber);}
+    public Project updateProjectByProjectNumber(String projectNumber , Project updatedProject){
+        Project existingProject = projectRepository.findByProjectNumber(projectNumber);
+        if (existingProject != null) {
+            System.out.println(updatedProject.getName());
+            existingProject.setName(updatedProject.getName());
+            existingProject.setProjectNumber(updatedProject.getProjectNumber());
+            existingProject.setDirection(updatedProject.getDirection());
+            existingProject.setPm(updatedProject.getPm());
+            existingProject.setTm(updatedProject.getTm());
+            existingProject.setDateStart(updatedProject.getDateStart());
+            existingProject.setDateEnd(updatedProject.getDateEnd());
+            projectRepository.save(existingProject);
+            return existingProject;
+        }
+        return null;
+    }
 }

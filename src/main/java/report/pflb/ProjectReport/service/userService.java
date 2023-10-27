@@ -24,6 +24,6 @@ public class userService{
 
     public List<User> getAllFromDatabase(){return userRepository.findAll();}
 
-    public User findById(int id){return userRepository.findById(id);}
+    public User findById(long id){return userRepository.findById(id);}
     public User findByLogin(String login){return userRepository.findByLogin(login);}
 }
