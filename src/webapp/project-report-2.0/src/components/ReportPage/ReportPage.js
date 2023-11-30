@@ -90,8 +90,13 @@ const ReportPage = () => {
         <h2 style={{ fontSize: '20px', textAlign: 'center' }}>по проекту {projectData.name}</h2>
         <div className="project-info">
           <div>
-            <h4>ПМ проекта: {projectData.pm.name} {projectData.pm.surname}</h4>
-            <h4>ТМ проекта: {projectData.tm.name} {projectData.tm.surname}</h4>
+            {console.log( projectData)}
+            {projectData.pms.map((pm, index) => (
+              <h4 key = {index}>ПМ проекта: {pm.name} {pm.surname}</h4>
+            ))}
+            {projectData.tms.map((tm, index) => (
+              <h4 key = {index}>ТМ проекта: {tm.name} {tm.surname}</h4>
+            ))}
             <h4>По проведенной работе в период с {formattedStartDate} по {formattedDate}</h4>
           </div>
         </div>

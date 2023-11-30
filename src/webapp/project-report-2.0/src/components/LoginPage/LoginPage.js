@@ -7,11 +7,16 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
 
-const LoginPage = ({onLoginSuccess}) => {
+const LoginPage = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const navigateToControlPanel=()=>{navigate("/ControlPanel")}
+  
+  const navigateToControlPanel = () => {
+    navigate("/ControlPanel");
+  };
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const userData = {
@@ -20,39 +25,36 @@ const LoginPage = ({onLoginSuccess}) => {
     };
 
     try {
-          const response = await fetch('http://77.50.236.202:48225/api/login', {
+      const response = await fetch('http://77.50.236.202:48225/api/login', {
         method: 'POST',
-        mode:'cors',
+        mode: 'cors',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData),
-    });
-    
+      });
+
       const responseBody = await response.json();
-      
+
       if (responseBody.status === true) {
         localStorage.setItem('token', responseBody.user.token);
         onLoginSuccess(responseBody.user);
-        switch (responseBody.user.role.name){
+        
+        switch (responseBody.user.role.name) {
           case 'ADMIN':
-            navigateToControlPanel();
-            break;
           case 'PM':
+          case 'TM':
             navigateToControlPanel();
             break;
-              case 'TM':
-              navigateToControlPanel();
-              break;
           default:
-            navigate('/')
+            navigate('/');
         }
-
       } else {
-        console.error('Ошибка при входе');
+        setError('Ошибка авторизации');
       }
     } catch (error) {
       console.error('Ошибка при выполнении запроса:', error);
+      setError('Ошибка авторизации');
     }
   };
 
@@ -87,6 +89,11 @@ const LoginPage = ({onLoginSuccess}) => {
               Log in
             </Button>
           </Box>
+          {error && (
+            <Typography variant="body1" color="error" align="center" mt={2}>
+              {error}
+            </Typography>
+          )}
         </form>
       </Box>
     </Container>

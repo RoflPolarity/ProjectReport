@@ -24,6 +24,8 @@ const AddProject = () => {
   const [selectedTm, setSelectedTm] = useState('');
   const [direction, setDirection] = useState('');
   const [dateError, setDateError] = useState(false);
+  const pmToSend = Array.isArray(selectedPm) ? selectedPm : [selectedPm];
+  const tmToSend = Array.isArray(selectedTm) ? selectedTm : [selectedTm];
 
   const validateDates = () => {
     const startDateObj = new Date(startDate);
@@ -98,8 +100,8 @@ const AddProject = () => {
       startDate: startDate,
       endDate: projectEndDate,
       status: projectStatus,
-      pm: selectedPm,
-      tm: selectedTm,
+      pm: pmToSend,
+      tm: tmToSend,
       direction: direction,
     };
 
@@ -113,7 +115,8 @@ const AddProject = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.success) {
+        console.log(data)
+        if (data===true) {
           window.location.href = "/ControlPanel";
         }
             })
@@ -129,7 +132,7 @@ const AddProject = () => {
       </Typography>
       <form onSubmit={handleFormSubmit}>
         <TextField
-          label="Название проекта"
+          label="Название проекта*"
           variant="outlined"
           fullWidth
           value={projectName}
@@ -139,7 +142,7 @@ const AddProject = () => {
   
         <div style={{ margin: '16px 0' }}>
           <TextField
-            label="Номер проекта"
+            label="Номер проекта*"
             variant="outlined"
             fullWidth
             value={projectNumber}
@@ -152,7 +155,7 @@ const AddProject = () => {
           <InputLabel htmlFor="direction">Направление</InputLabel>
           <Select
             value={direction}
-            label="Направление"
+            label="Направление*"
             onChange={(e) => setDirection(e.target.value)}>
           <MenuItem value="АТ">АТ</MenuItem>
           <MenuItem value="ФТ">ФТ</MenuItem>
@@ -164,7 +167,7 @@ const AddProject = () => {
 
         <div style={{ margin: '16px 0' }}>
           <TextField
-            label="Дата начала проекта"
+            label="Дата начала проекта*"
             variant="outlined"
             fullWidth
             type="date"
@@ -198,7 +201,7 @@ const AddProject = () => {
             id='pm-select'
             onChange={(event, newValue) => setSelectedPm(newValue)}
             options={pmList}
-            renderInput={(params) => <TextField {...params} label="Выберите ПМ" />}
+            renderInput={(params) => <TextField {...params} label="Выберите ПМ*" />}
           />
         </div>
   
@@ -209,7 +212,7 @@ const AddProject = () => {
             id="tm-select"        
             onChange={(event, newValue) => setSelectedTm(newValue)}
             options={tmList}
-            renderInput={(params) => <TextField {...params} label="Выберите ТМ" />}
+            renderInput={(params) => <TextField {...params} label="Выберите ТМ*" />}
           />
         </div>
   

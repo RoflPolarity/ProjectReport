@@ -28,7 +28,14 @@ public class ProjectController {
 
     @GetMapping("/api/getProject/{projectNumber}")
     public Project getProjectByNumber(@PathVariable String projectNumber){
-        return projectService.findByProjectNumber(projectNumber);
+        Project project = projectService.findByProjectNumber(projectNumber);
+        List<User> tms = new ArrayList<>();
+        List<User> pms = new ArrayList<>();
+        for (int i = 0; i < project.getTm().size(); i++) tms.add(userService.findById(project.getTm().get(i)));
+        for (int i = 0; i < project.getPm().size(); i++) pms.add(userService.findById(project.getPm().get(i)));
+        project.setTms(tms);
+        project.setPms(pms);
+        return project;
     }
 
     @GetMapping("/api/GetAllProjects")
